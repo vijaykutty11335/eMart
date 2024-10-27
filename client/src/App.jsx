@@ -9,11 +9,11 @@ import AdminProductList from './Components/AminProductList';
 import { useState } from 'react';
 
 function App() {
-  const [product, setProduct] = useState([]);
+  // const [product, setProduct] = useState([]);
 
-  const addProduct = (newProduct) =>{
-    setProduct([...product, newProduct]);
-  }
+  // const addProduct = (newProduct) =>{
+  //   setProduct([...product, newProduct]);
+  // }
 
   return (
     <>
@@ -24,8 +24,8 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/homepage' element={<Homepage/>}/>
         <Route path='/navbar' element={<Navbar/>}/>
-        <Route path='/adminAddProducts' element={<AdminAddProducts addProduct={addProduct}/> }/>
-        <Route path='/adminProductList' element={<AdminProductList product={product}/> }/>
+        <Route path='/adminAddProducts' element={<AdminAddProducts/> }/>
+        <Route path='/adminProductList' element={<AdminProductList/> }/>
 
       </Routes>
     </Router>

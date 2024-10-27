@@ -64,11 +64,12 @@ export default function AdminAddProducts() {
     formData.append('category', fields.category);
     formData.append('seller', fields.seller);
     formData.append('stock', fields.stock);
-
+    
     const imgFile = fileInputRef.current.files[0];
     if(imgFile){
       formData.append('image', imgFile);
     }
+
     
 
     try{
@@ -90,6 +91,7 @@ export default function AdminAddProducts() {
         stock: "",
       });
       setSelectedImg("");
+      setError("");
 
     } catch(error){
       console.error("Error adding product:", error.response.data);

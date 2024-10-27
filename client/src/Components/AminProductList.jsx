@@ -1,19 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+import axios from "axios";
 import { Link } from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const AdminProductList = ({product}) => {
+
+const AdminProductList = () => {
   const [search, setSearch] = useState("");
   const [noProduct, setNoProduct] = useState(true);
+  const [products, setProducts] = useState([]);
 
-  const filteredData = product.filter((item) => {
+ useEffect(() =>{
+  const fetchProducts = async() =>{
+    try{
+      const allProducts = await axios.get("http://localhost:5000/api/products/getProducts");
+      setProducts(allProducts.data.products);
+      setNoProduct(allProducts.data.length === 0);
+    } catch (error) {
+      console.error("Error occured while getting Products:", error);
+    }
+  }
+
+  fetchProducts();
+ }, []);
+
+  const filteredData = products.filter((item) => {
+    
     const searchTerm = search.toLowerCase();
     try{
       return(
         search === "" ? item :
-        
         item.name.toLowerCase().includes(searchTerm) ||
         item.price.toString().includes(searchTerm) ||
         item.ratings.toString().includes(searchTerm) ||
@@ -25,10 +42,22 @@ const AdminProductList = ({product}) => {
       console.error("Error during Search filter: ",error);
     }
   })
-
+  
   useEffect (() =>{
     setNoProduct(filteredData.length === 0);
   },[filteredData]);
+
+  const handleDeleteProducts = async (id) =>{
+    try{
+      const deleteProduct = await axios.delete(`http://localhost:5000/api/products/deleteProducts/${id}`);
+      setProducts(prevProducts => prevProducts.filter(product => product._id !== id));
+      if(deleteProduct.status === 200){
+        console.log("Product deleted Successfully");
+      }
+    } catch(error) {
+      console.log("Product can't deleted, An error occured");
+    }
+  }
 
   return (
     <>
@@ -85,7 +114,7 @@ const AdminProductList = ({product}) => {
             <tr key={index} className="admin-tbody">
               <td>{index+1}</td>
               <td>
-                {item.image ? (<img src={item.image} alt={item.name} />) : (<span>Image is not available</span>)}
+                {item.image ? (<img src={`http://localhost:5000/${item.image}`} alt={item.name} />) : (<span>Image is not available</span>)}
               </td>
               <td>{item.name}</td>
               <td>₹ {item.price}</td>
@@ -93,7 +122,7 @@ const AdminProductList = ({product}) => {
               <td>{item.category}</td>
               <td>{item.seller}</td>
               <td>{item.stock}</td>
-              <td className="editDelete-btns"><FaEdit className="admin-edit"/> <MdDelete className="admin-delete"/></td>
+              <td className="editDelete-btns"><FaEdit className="admin-edit"/> <MdDelete className="admin-delete" onClick={() => handleDeleteProducts(item._id)}/></td>
             </tr>
           ))}
           </tbody>

@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 export default function AdminAddProducts() {
   const [selectedImg, setSelectedImg] = useState(null);
   const [error, setError] = useState("");
-  const [ratingsError, setRatingsError] = useState("");
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -51,10 +50,18 @@ export default function AdminAddProducts() {
     e.preventDefault();
     if(fields.ratings > 5 || isNaN(fields.ratings) || fields.ratings < 0)
     {
-      setRatingsError("Ratings must be a number between 0 to 5");
+      setError("Ratings must be a number between 0 to 5");
       return;
     }
-    setRatingsError("");
+    if(fields.price < 0 || isNaN(fields.price)){
+      setError("Price must be a Positive Number");
+      return;
+    }
+    if(fields.stock < 0 || isNaN(fields.stock)){
+      setError("Stock must be a Positive Number");
+      return;
+    }
+    setError("");
 
     const formData = new FormData();
     formData.append('name', fields.name);
@@ -159,7 +166,7 @@ export default function AdminAddProducts() {
               value={fields.ratings}
               onChange={handleOnchange}
             />
-            {ratingsError && <span className="admin-ratingsError">{ratingsError}</span>}
+            {/* {ratingsError && <span className="admin-ratingsError">{ratingsError}</span>} */}
             <label htmlFor="category">Category :</label>
             <div className="filter-container">
               <select
@@ -168,17 +175,17 @@ export default function AdminAddProducts() {
                 value={fields.category}
                 onChange={handleOnchange}
               >
-                <option value="category" selected hidden>
+                <option value="" hidden>
                   Category
                 </option>
-                <option value="stationary">Stationary</option>
-                <option value="mobiles">Electronics</option>
-                <option value="shoes">Fashion & Clothing</option>
-                <option value="laptops">Home & Furniture</option>
-                <option value="watches">Health & Beauty</option>
-                <option value="sports">Sports</option>
-                <option value="groceries">Groceries</option>
-                <option value="others">Others</option>
+                <option value="Stationary">Stationary</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion & Clothing">Fashion & Clothing</option>
+                <option value="Home & Furniture">Home & Furniture</option>
+                <option value="Health & Beauty">Health & Beauty</option>
+                <option value="Sports">Sports</option>
+                <option value="Groceries">Groceries</option>
+                <option value="Others">Others</option>
               </select>
             </div>
             <label htmlFor="seller">Seller :</label>

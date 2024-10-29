@@ -8,7 +8,15 @@ const ProductSchema = new mongoose.Schema({
     ratings : {type: Number, required: true},
     category : {type: String, required: true},
     seller : {type: String, required: true},
-    stock : {type: Number, required: true}
+    stock : {type: Number, required: true},
+    createdAtDate: { 
+      type: String, 
+      default: () => new Date().toLocaleDateString('en-IN')
+    },
+    createdAtTime: { 
+      type: String, 
+      default: () => new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' })
+    },
   });
 
 const productsModel = mongoose.model('Product', ProductSchema);

@@ -29,7 +29,7 @@ router.post('/addProducts',  upload.single('image'), async(req,res) =>{
 
     const {name, price, description, ratings, category, seller, stock} = req.body;
 
-    const image = req.file ? req.file.path.replace(/\\/g, '/') : ''; // Normalize path for storage
+    const image = req.file ? req.file.path.replace(/\\/g, '/') : '';
 
     if (!req.file) {
         return res.status(400).json({ message: "Image file is required." });
@@ -46,19 +46,69 @@ router.post('/addProducts',  upload.single('image'), async(req,res) =>{
     }
 })
 
-//getProducts route
+//getAllProducts route
 router.get('/getProducts', async (req,res) => {
         try{
             const products = await productsModel.find();
-            res.status(200).json({message: "Product get Successfully!",products:products});
+            res.status(200).json({message: "Products fetched Successfully!",products:products});
         } catch(error){
             res.status(500).json({message: "An error occured"});
             console.log(error.message);
         }
 })
 
-//deleteProducts route
-router.delete('/deleteProducts/:id', async(req,res) =>{
+//getProductById route
+router.get('/getproduct/:id', async(req,res) =>{
+    try{
+        const product = await productsModel.findById(req.params.id);
+        if(product){
+            res.status(200).json({message: "Product fetched Successfully!", product : product});
+        } else {
+            res.status(404).json({message: "Product not Found!"});
+        }
+    } catch (error){
+        res.status(500).json({message: "An error occured"});
+        console.log(error.message);
+    }
+})
+
+//updateProduct route
+router.put('/updateProduct/:id', upload.single('image'), async (req,res) => {
+    const {name, price, description, ratings, category, seller, stock} = req.body;
+    const image = req.file ? req.file.path.replace(/\\/g, '/') : null;
+
+    try{
+        const product = await productsModel.findById(req.params.id);
+        if(!product){
+            res.status(404).json({message: "Product not Found!"});
+            return;
+        }
+
+        product.name = name;
+        product.price = price;
+        product.description = description;
+        product.ratings = ratings;
+        product.category = category;
+        product.seller = seller;
+        product.stock = stock;
+
+        if(image){
+            if(product.image){
+                fs.unlinkSync(path.join(__dirname, '../', product.image));
+            }
+        product.image = image;
+        }
+
+        await product.save();
+        res.status(200).json({message: "Product Updated Successfully!", product});
+    } catch(error){
+        console.error("error updating product: ",error.message);
+        res.status(500).json({message: "An eoor occured"});
+    }
+})
+
+//deleteProduct route
+router.delete('/deleteProduct/:id', async(req,res) =>{
     try{
         
         const deleteProducts = await productsModel.findByIdAndDelete(req.params.id);

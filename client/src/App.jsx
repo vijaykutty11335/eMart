@@ -7,13 +7,15 @@ import './index.css';
 import AdminAddProducts from './Components/AdminAddProducts';
 import AdminProductList from './Components/AminProductList';
 import { useState } from 'react';
+import AdminUserDetails from './Components/AdminUserDetails';
 
 function App() {
-  // const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState();
+  console.log(product);
 
-  // const addProduct = (newProduct) =>{
-  //   setProduct([...product, newProduct]);
-  // }
+  const hanldeProductReset = () => {
+    setProduct(null);
+  }
 
   return (
     <>
@@ -23,9 +25,9 @@ function App() {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/homepage' element={<Homepage/>}/>
-        <Route path='/navbar' element={<Navbar/>}/>
-        <Route path='/adminAddProducts' element={<AdminAddProducts/> }/>
-        <Route path='/adminProductList' element={<AdminProductList/> }/>
+        <Route path='/adminUserDetails' element={<AdminUserDetails/>}/>
+        <Route path='/adminAddProducts' element={<AdminAddProducts product={product} onReset={hanldeProductReset}/> }/>
+        <Route path='/adminProductList' element={<AdminProductList setProduct={setProduct}/> }/>
 
       </Routes>
     </Router>

@@ -4,29 +4,29 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import {fetchProducts, allProducts} from "../UtilFunctions/Products.api.js";
+import { toast, ToastContainer } from "react-toastify";
 
-const AdminProductList = () => {
+const AdminProductList = ({setProduct}) => {
   const [search, setSearch] = useState("");
   const [noProduct, setNoProduct] = useState(true);
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortby, setSortby] = useState("");
 
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const allProducts = await axios.get("http://localhost:5000/api/products/getProducts");
-        setProducts(allProducts.data.products);
-        setNoProduct(allProducts.data.products.length === 0);
-      } catch (error) {
-        console.error("Error occurred while getting products:", error);
-      }
-    };
-    fetchProducts();
+    const loadProducts = async () =>{
+    await fetchProducts();
+    setProducts(allProducts || [])
+    }
+    loadProducts();
   }, []);
 
   const filteredData = products
-  .filter((item) => {
+  ?.filter((item) => {
     const searchTerm = search.toLowerCase();
     const categoryTerm = selectedCategory.toLowerCase();
 
@@ -54,14 +54,15 @@ const AdminProductList = () => {
   });
 
   useEffect(() => {
-    setNoProduct(filteredData.length === 0);
+    setNoProduct(filteredData?.length === 0);
   }, [filteredData]);
 
   const handleDeleteProducts = async (id) => {
     try {
-      const deleteProduct = await axios.delete(`http://localhost:5000/api/products/deleteProducts/${id}`);
+      const deleteProduct = await axios.delete(`http://localhost:5000/api/products/deleteProduct/${id}`);
       setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
       if (deleteProduct.status === 200) {
+        toast.success("Product Deleted Successfully!");
         console.log("Product deleted successfully");
       }
     } catch (error) {
@@ -74,7 +75,10 @@ const AdminProductList = () => {
       <div className="productList-container">
         <div className="admin-nav">
           <h2>PRODUCTS</h2>
-          <Link to="/adminAddProducts"><button className="productList-btn">Add Products</button></Link>
+          <Link to="/adminUserDetails">
+          <button className="list-btn">User Details</button>
+          </Link>
+          <Link to="/adminAddProducts"><button className="list-btn">Add Products</button></Link>
         </div>
         <div className="admin-search">
           <input
@@ -91,7 +95,7 @@ const AdminProductList = () => {
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
-            <option value="" hidden>Category</option>
+            <option value="" selected>Category</option>
             <option value="Stationary">Stationary</option>
             <option value="Electronics">Electronics</option>
             <option value="Fashion & Clothing">Fashion & Clothing</option>
@@ -103,7 +107,7 @@ const AdminProductList = () => {
           </select>
 
           <select className="admin-filter" value={sortby} onChange={(e) => setSortby(e.target.value)}>
-            <option value="sort by" hidden>Sort by</option>
+            <option value="" selected>Sort by</option>
             <option value="Price - ascending">Price - ascending</option>
             <option value="Price - descending">Price - descending</option>
             <option value="Stock - ascending">Stock - ascending</option>
@@ -127,7 +131,7 @@ const AdminProductList = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((item, index) => (
+              {filteredData?.map((item, index) => (
                 <tr key={index} className="admin-tbody">
                   <td>{index + 1}</td>
                   <td>
@@ -145,7 +149,7 @@ const AdminProductList = () => {
                   <td>{item.stock}</td>
                   <td>{item.createdAtDate}<br />{item.createdAtTime}</td>
                   <td className="editDelete-btns">
-                    <FaEdit className="admin-edit" />
+                    <FaEdit className="admin-edit" onClick={()=>{setProduct(item._id); navigate('/adminAddProducts')}}/>
                     <MdDelete className="admin-delete" onClick={() => handleDeleteProducts(item._id)} />
                   </td>
                 </tr>
@@ -158,6 +162,7 @@ const AdminProductList = () => {
             </div>
           )}
         </div>
+        <ToastContainer/>
       </div>
     </>
   );

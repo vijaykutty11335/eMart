@@ -115,6 +115,7 @@ router.delete('/deleteProduct/:id', async(req,res) =>{
         if (!deleteProducts) {
             return res.status(404).json({message: "Product not found!"});
         }
+        fs.unlinkSync(path.join(__dirname, '../', deleteProducts.image));
         res.status(200).json({message: "Product deleted Successfully!", deleteProducts: deleteProducts});
     } catch(error){
         res.status(500).json({message: "An error occured"});

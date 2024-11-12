@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import {fetchProducts, allProducts} from "../UtilFunctions/Products.api.js";
+import { fetchProducts, allProducts } from "../UtilFunctions/Products.api.js";
 import { toast, ToastContainer } from "react-toastify";
 
-const AdminProductList = ({setProduct}) => {
+const AdminProductList = ({ setProduct }) => {
   const [search, setSearch] = useState("");
   const [noProduct, setNoProduct] = useState(true);
   const [products, setProducts] = useState([]);
@@ -16,22 +16,22 @@ const AdminProductList = ({setProduct}) => {
   const [sortby, setSortby] = useState("");
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    const loadProducts = async () =>{
-    await fetchProducts();
-    setProducts(allProducts || [])
+    const loadProducts = async () => {
+      await fetchProducts();
+      setProducts(allProducts || [])
     }
     loadProducts();
   }, []);
 
   const filteredData = products
-  ?.filter((item) => {
-    const searchTerm = search.toLowerCase();
-    const categoryTerm = selectedCategory.toLowerCase();
+    ?.filter((item) => {
+      const searchTerm = search.toLowerCase();
+      const categoryTerm = selectedCategory.toLowerCase();
 
       return (
-        (search === "" || 
+        (search === "" ||
           item.name.toLowerCase().includes(searchTerm) ||
           item.price.toString().includes(searchTerm) ||
           item.ratings.toString().includes(searchTerm) ||
@@ -40,18 +40,18 @@ const AdminProductList = ({setProduct}) => {
           item.stock.toString().includes(searchTerm) ||
           item.createdAtDate.toString().includes(searchTerm) ||
           item.createdAtTime.toString().includes(searchTerm)
-        ) && 
+        ) &&
         (selectedCategory === "" || item.category.toLowerCase().includes(categoryTerm))
       );
 
-  })
-  .sort((a,b) => {
-    if(sortby === "Price - ascending") return (a.price - b.price);
-    else if(sortby === "Price - descending") return (b.price - a.price);
-    else if(sortby === "Stock - ascending") return (a.stock - b.stock);
-    else if(sortby === "Stock - descending") return (b.stock - a.stock);
-    return 0;
-  });
+    })
+    .sort((a, b) => {
+      if (sortby === "Price - ascending") return (a.price - b.price);
+      else if (sortby === "Price - descending") return (b.price - a.price);
+      else if (sortby === "Stock - ascending") return (a.stock - b.stock);
+      else if (sortby === "Stock - descending") return (b.stock - a.stock);
+      return 0;
+    });
 
   useEffect(() => {
     setNoProduct(filteredData?.length === 0);
@@ -76,7 +76,7 @@ const AdminProductList = ({setProduct}) => {
         <div className="admin-nav">
           <h2>PRODUCTS</h2>
           <Link to="/adminUserDetails">
-          <button className="list-btn">User Details</button>
+            <button className="list-btn">User Details</button>
           </Link>
           <Link to="/adminAddProducts"><button className="list-btn">Add Products</button></Link>
         </div>
@@ -96,13 +96,13 @@ const AdminProductList = ({setProduct}) => {
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="" selected>Category</option>
-            <option value="Stationary">Stationary</option>
-            <option value="Electronics">Electronics</option>
-            <option value="Fashion & Clothing">Fashion & Clothing</option>
-            <option value="Home & Furniture">Home & Furniture</option>
-            <option value="Health & Beauty">Health & Beauty</option>
-            <option value="Sports">Sports</option>
-            <option value="Groceries">Groceries</option>
+            <option value="Men's Clothing">Men's Clothing</option>
+            <option value="Women's Clothing">Women's Clothing</option>
+            <option value="Kid's Clothing">Kid's Clothing</option>
+            <option value="Footwear">Footwear</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Formal & Office Wear">Formal & Office Wear</option>
+            <option value="Traditional Wear">Traditional Wear</option>
             <option value="Others">Others</option>
           </select>
 
@@ -149,7 +149,7 @@ const AdminProductList = ({setProduct}) => {
                   <td>{item.stock}</td>
                   <td>{item.createdAtDate}<br />{item.createdAtTime}</td>
                   <td className="editDelete-btns">
-                    <FaEdit className="admin-edit" onClick={()=>{setProduct(item._id); navigate('/adminAddProducts')}}/>
+                    <FaEdit className="admin-edit" onClick={() => { setProduct(item._id); navigate('/adminAddProducts') }} />
                     <MdDelete className="admin-delete" onClick={() => handleDeleteProducts(item._id)} />
                   </td>
                 </tr>
@@ -162,7 +162,7 @@ const AdminProductList = ({setProduct}) => {
             </div>
           )}
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     </>
   );

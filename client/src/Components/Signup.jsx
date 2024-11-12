@@ -50,7 +50,9 @@ export default function Signup() {
                 <form className='signup-form'  onSubmit={handleSubmit}>
                     <div className='signup-header'>
                     <h2>Signup</h2>
-                    {error && <span className='error-msg'>{error}</span>}
+                    <div className='error-msg'>
+                    {error && <span>{error}</span>}
+                    </div>
                     </div>
                     <div className='fields'>
                         <label htmlFor="username">Username :</label>

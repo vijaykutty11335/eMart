@@ -3,12 +3,10 @@ import { RiImageAddLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
-// import { useNavigate } from "react-router-dom";
 
 export default function AdminAddProducts({product, onReset}) {
   const [selectedImg, setSelectedImg] = useState(null);
   const [error, setError] = useState("");
-  // const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
   const [fields, setFields] = useState({
@@ -80,6 +78,7 @@ export default function AdminAddProducts({product, onReset}) {
         stock: ""
     });
     setSelectedImg("");
+    setError("");
     }
     else{
     setFields({
@@ -92,24 +91,31 @@ export default function AdminAddProducts({product, onReset}) {
         stock: ""
     });
     setSelectedImg("");
+    setError("")
   }
   }
 
   const handleAddorUpdateProduct = async (e) => {
     e.preventDefault();
+    if(!fields.name || !fields.description || !fields.price || !fields.ratings || !fields.category || !fields.seller || !fields.stock)
+      {
+        setError("Please provide details in all fields to proceed.");
+        return;
+      }
     if(fields.ratings > 5 || isNaN(fields.ratings) || fields.ratings < 0)
     {
-      setError("Ratings must be a number between 0 to 5");
+      setError("Ratings must be a number between 0 to 5.");
       return;
     }
     if(fields.price < 0 || isNaN(fields.price)){
-      setError("Price must be a Positive Number");
+      setError("Price must be a Positive Number.");
       return;
     }
     if(fields.stock < 0 || isNaN(fields.stock)){
-      setError("Stock must be a Positive Number");
+      setError("Stock must be a Positive Number.");
       return;
     }
+
     setError("");
 
     const formData = new FormData();
@@ -152,7 +158,7 @@ export default function AdminAddProducts({product, onReset}) {
           'content-type' : 'multipart/form-data'
         }
       });
-      toast.success("Product added Successfully");
+      toast.success("Product Added Successfully");
       setFields({
         name: "",
         price: "",
@@ -171,6 +177,12 @@ export default function AdminAddProducts({product, onReset}) {
       setError(error.response?.data?.message || "An error occured");
     }
   };
+
+  const handleKeyPress = (e) => {
+    if(e.key === "Enter"){
+      handleAddorUpdateProduct(e);
+    }
+  }
   
 
   return (
@@ -182,7 +194,7 @@ export default function AdminAddProducts({product, onReset}) {
           <button className="list-btn">User Details</button>
           </Link>
           <Link to="/adminProductList">
-            <button className="list-btn">Product List</button>
+            <button className="list-btn">All Products</button>
           </Link>
         </div>
         <form className="productFileds-container"  onSubmit={handleAddorUpdateProduct} encType="multipart/form-data">
@@ -236,7 +248,6 @@ export default function AdminAddProducts({product, onReset}) {
               value={fields.ratings}
               onChange={handleOnchange}
             />
-            {/* {ratingsError && <span className="admin-ratingsError">{ratingsError}</span>} */}
             <label htmlFor="category">Category :</label>
             <div className="filter-container">
               <select
@@ -248,13 +259,13 @@ export default function AdminAddProducts({product, onReset}) {
                 <option value="" hidden>
                   Category
                 </option>
-                <option value="Stationary">Stationary</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Fashion & Clothing">Fashion & Clothing</option>
-                <option value="Home & Furniture">Home & Furniture</option>
-                <option value="Health & Beauty">Health & Beauty</option>
-                <option value="Sports">Sports</option>
-                <option value="Groceries">Groceries</option>
+                <option value="Men's Clothing">Men's Clothing</option>
+                <option value="Women's Clothing">Women's Clothing</option>
+                <option value="Kid's Clothing">Kid's Clothing</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Formal & Office Wear">Formal & Office Wear</option>
+                <option value="Traditional Wear">Traditional Wear</option>
                 <option value="Others">Others</option>
               </select>
             </div>
@@ -276,7 +287,7 @@ export default function AdminAddProducts({product, onReset}) {
             />
           </div>
           <div className="admin-btns">
-            <button type="submit" className="add-btn">
+            <button type="submit" className="add-btn" onKeyDown={handleKeyPress}>
               {product ? "Update Product" : "Add Product"}
             </button>
             <label className="clr-btn" onClick={handleClearorCancel}>{product ? "Cancel" : "Clear"}</label>

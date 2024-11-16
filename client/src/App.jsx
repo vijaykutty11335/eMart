@@ -9,6 +9,8 @@ import AdminProductList from './Components/AminProductList';
 import { useState } from 'react';
 import AdminUserDetails from './Components/AdminUserDetails';
 import AboutUs from './Components/ContactUs';
+import UserProductList from './Components/UserProductList';
+import UserProductDetails from './Components/UserProductDetails';
 
 function App() {
   const [product, setProduct] = useState();
@@ -31,6 +33,8 @@ function App() {
         <Route path='/adminUserDetails' element={<AdminUserDetails/>}/>
         <Route path='/adminAddProducts' element={<AdminAddProducts product={product} onReset={hanldeProductReset}/> }/>
         <Route path='/adminProductList' element={<AdminProductList setProduct={setProduct}/> }/>
+        <Route path='/userProductList' element={<UserProductList setProduct={setProduct}/>}/>
+        <Route path='/userProductDetails' element={<UserProductDetails product={product}/>}/>
 
       </Routes>
     </Router>

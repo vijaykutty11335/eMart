@@ -53,6 +53,7 @@ const AdminProductList = ({ setProduct }) => {
       return 0;
     });
 
+
   useEffect(() => {
     setNoProduct(filteredData?.length === 0);
   }, [filteredData]);
@@ -87,7 +88,9 @@ const AdminProductList = ({ setProduct }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+          <div className="adminSearch-icon">
           <IoSearchOutline className="search-btn" />
+          </div>
         </div>
         <div className="filter-container">
           <select
@@ -149,7 +152,7 @@ const AdminProductList = ({ setProduct }) => {
                   <td>{item.stock}</td>
                   <td>{item.createdAtDate}<br />{item.createdAtTime}</td>
                   <td className="editDelete-btns">
-                    <FaEdit className="admin-edit" onClick={() => { setProduct(item._id); navigate('/adminAddProducts') }} />
+                    <FaEdit className="admin-edit" onClick={() => { setProduct(item._id); navigate('/adminAddProducts')}} />
                     <MdDelete className="admin-delete" onClick={() => handleDeleteProducts(item._id)} />
                   </td>
                 </tr>

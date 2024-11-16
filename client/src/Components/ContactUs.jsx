@@ -30,16 +30,16 @@ const ContactUs = () => {
             </div>
             <div className='bottom-container'>
               <div className='contact-col1'>
-                <h3>Customer Support</h3>
-                <span>Our support team is available around the clock to address any concerns or queries you may have.</span>
+              <h3>Product Information</h3>
+              <span>Have questions about our products and services? Our team is available to provide detailed information to help you get the most out of Styles.</span>
               </div>
               <div className='contact-col2'>
                 <h3>Feedback and Suggestions</h3>
                 <span>We value your feedback and are continuously working to improve Styles. Your input is crucial in shaping the future of Styles.</span>
               </div>
               <div className='contact-col3'>
-                <h3>Feedback and Suggestions</h3>
-                <span>We value your feedback and are continuously working to improve Styles. Your input is crucial in shaping the future of Styles.</span>
+                <h3>Customer Support</h3>
+                <span>Our support team is available around the clock to address any concerns or queries you may have.</span>
               </div>
             </div>
           </div>

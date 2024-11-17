@@ -5,6 +5,7 @@ import { RiLoopRightFill } from "react-icons/ri";
 import { IoLockClosedOutline } from "react-icons/io5";
 import { IoUmbrellaOutline } from "react-icons/io5";
 import Footer from './Footer';
+import {Link} from 'react-router-dom';
 
 const HomePage = () => {
   return (
@@ -16,7 +17,7 @@ const HomePage = () => {
           <div className='welcome-text'>
             <span className='welcome-text1'>Unleash Your Style with Us!</span>
             <span className='welcome-text2'>Dive into the world of trends and timeless elegance.</span>
-            <button className='explore-btn'>Explore<GoArrowRight className='explore-arrow'/></button>
+            <Link to='/userProductList'><button className='explore-btn'>Explore<GoArrowRight className='explore-arrow'/></button></Link>
 
           </div>
         </div>

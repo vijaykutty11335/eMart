@@ -9,6 +9,8 @@ export default function AdminAddProducts({product, onReset}) {
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
 
+  const token = localStorage.getItem("token");
+
   const [fields, setFields] = useState({
     name: "",
     price: "",
@@ -135,7 +137,10 @@ export default function AdminAddProducts({product, onReset}) {
     try{
       if(product){
         await axios.put(`http://localhost:5000/api/products/updateProduct/${product}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { 
+            Authorization : `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+           }
         });
         toast.success("Product Updated Successfully!");
         onReset();
@@ -155,6 +160,7 @@ export default function AdminAddProducts({product, onReset}) {
       else{
       await axios.post("http://localhost:5000/api/products/addProducts", formData, {
         headers: {
+          Authorization : `Bearer ${token}`,
           'content-type' : 'multipart/form-data'
         }
       });

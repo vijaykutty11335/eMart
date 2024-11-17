@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import { IoSearchOutline } from "react-icons/io5";
 import { BsHandbag } from "react-icons/bs";
@@ -12,12 +12,35 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
 
   const [searchTerm, setSearchterm] = useState("");
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if(token){
+      const decodeToken = JSON.parse(atob(token.split('.')[1]));
+      setUsername(decodeToken.username);
+      setRole(dropDown.role);
+
+      if(decodeToken.role === "admin"){
+        setIsAdmin(true);
+      }
+    }
+  }, [token]);
 
   const handleSearch = () => {
     if(searchTerm.trim()){
       navigate(`/userProductList?search=${searchTerm}`);
     }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate('/login');
   }
 
   const handleKeyDown = (e) => {
@@ -57,11 +80,35 @@ const Navbar = () => {
             <MdOutlinePhone className='contactus-icon'/>
             <Link to="/contactUs"><a href='#'>Contact Us</a></Link>
           </div>
+          {token ? 
+          (
+            <>
+            {username && 
+              <>
+              <div className='logged-in'>
+            <button className='user-btn' onClick={() => {setDropDown(prev => !prev)}}>{username.charAt(0).toUpperCase()}</button>
+            </div>
+
+            {dropDown &&
+            <div className='dropdown-menu'>
+              <button>Profile</button>
+              {isAdmin && <button onClick={() => {navigate('/adminAddProducts')}}>Dashboard</button>}
+              <button onClick={handleLogout}>Logout</button>
+            </div>}
+            </>
+            }
+            </>
+          )
+          :
+          (
+            <>
           <div className='login-signup'>
             <CgProfile className='profile-icon'/>
            <Link to="/signup"><a href="#">Signup</a></Link> / 
            <Link to="/login"><a href="#">Login</a></Link>
           </div>
+          </>
+          )}
 
 
         </div>

@@ -17,6 +17,8 @@ const AdminProductList = ({ setProduct }) => {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     const loadProducts = async () => {
       await fetchProducts();
@@ -60,7 +62,11 @@ const AdminProductList = ({ setProduct }) => {
 
   const handleDeleteProducts = async (id) => {
     try {
-      const deleteProduct = await axios.delete(`http://localhost:5000/api/products/deleteProduct/${id}`);
+      const deleteProduct = await axios.delete(`http://localhost:5000/api/products/deleteProduct/${id}`,{
+        headers: {
+          Authorization : `Bearer ${token}`
+        }
+      });
       setProducts((prevProducts) => prevProducts.filter(product => product._id !== id));
       if (deleteProduct.status === 200) {
         toast.success("Product Deleted Successfully!");

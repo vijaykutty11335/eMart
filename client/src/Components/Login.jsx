@@ -20,7 +20,10 @@ function Login() {
     setLoading(true);
     try {
       const res = await axios.post('http://localhost:5000/api/auth/login', formData);
-      toast.success("Register Successfully!");
+      const token = res.data.token;
+      localStorage.setItem("token",token);
+      console.log("token",token);
+      toast.success("Login Successfully!");
       setTimeout(() => {
         navigate('/homepage');
       }, 2000);

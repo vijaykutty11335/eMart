@@ -4,8 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const productsModel = require('../models/products');
-
 const router = express.Router();
+const {authenticateToken, authorizeRole} = require('../utils/authMiddleware');
+
 router.use(cors());
 
 const uploadDir = path.join(__dirname, '../uploads');
@@ -25,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 //addProducts route
-router.post('/addProducts',  upload.single('image'), async(req,res) =>{
+router.post('/addProducts', authenticateToken, authorizeRole('admin'), upload.single('image'), async(req,res) =>{
 
     const {name, price, description, ratings, category, seller, stock} = req.body;
 
@@ -73,7 +74,7 @@ router.get('/getproduct/:id', async(req,res) =>{
 })
 
 //updateProduct route
-router.put('/updateProduct/:id', upload.single('image'), async (req,res) => {
+router.put('/updateProduct/:id', authenticateToken, authorizeRole('admin'), upload.single('image'), async (req,res) => {
     const {name, price, description, ratings, category, seller, stock} = req.body;
     const image = req.file ? req.file.path.replace(/\\/g, '/') : null;
 
@@ -108,7 +109,7 @@ router.put('/updateProduct/:id', upload.single('image'), async (req,res) => {
 })
 
 //deleteProduct route
-router.delete('/deleteProduct/:id', async(req,res) =>{
+router.delete('/deleteProduct/:id', authenticateToken, authorizeRole('admin'), async(req,res) =>{
     try{
         
         const deleteProducts = await productsModel.findByIdAndDelete(req.params.id);

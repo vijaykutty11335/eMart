@@ -11,11 +11,19 @@ import AdminUserDetails from './Components/AdminUserDetails';
 import AboutUs from './Components/ContactUs';
 import UserProductList from './Components/UserProductList';
 import UserProductDetails from './Components/UserProductDetails';
+import UserProfilePage from './Components/UserProfilepage';
+import AdminDashBoard from './Components/AdminDashBoard';
+import AddtoCart from './Components/AddtoCart';
 
 function App() {
   const [product, setProduct] = useState();
-  console.log(product);
 
+  const [productId, setProductId] = useState();
+  console.log("product Id:",productId);
+
+  const [productIdCart, setProductIdCart] = useState();
+  console.log("productId Cart", productIdCart);
+  
   const hanldeProductReset = () => {
     setProduct(null);
   }
@@ -30,11 +38,14 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/homepage' element={<HomePage/>}/>
         <Route path='/contactUs' element={<AboutUs/>}/>
+        <Route path='/adminDashboard' element={<AdminDashBoard/>}/>
         <Route path='/adminUserDetails' element={<AdminUserDetails/>}/>
         <Route path='/adminAddProducts' element={<AdminAddProducts product={product} onReset={hanldeProductReset}/> }/>
         <Route path='/adminProductList' element={<AdminProductList setProduct={setProduct}/> }/>
-        <Route path='/userProductList' element={<UserProductList setProduct={setProduct}/>}/>
-        <Route path='/userProductDetails' element={<UserProductDetails product={product}/>}/>
+        <Route path='/userProductList' element={<UserProductList setProductId={setProductId}/>}/>
+        <Route path='/userProductDetails' element={<UserProductDetails productId={productId} setProductIdCart={setProductIdCart}/>}/>
+        <Route path='/userProfilePage' element={<UserProfilePage/>}/>
+        <Route path='/addtoCart' element={<AddtoCart productIdCart={productIdCart}/>}/>
 
       </Routes>
     </Router>

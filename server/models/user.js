@@ -5,15 +5,27 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: {type: String, enum:["admin","user"], default: "user"}
+  role: {type: String, enum:["admin","user"], default: "user"},
+  createdAtDate: {
+    type: String,
+    default: () => new Date().toLocaleDateString('en-IN')
+  },
+  createdAtTime: {
+    type: String,
+    default: () => new Date().toLocaleTimeString('en-IN', {timeZone: 'Asia/Kolkata'})
+  },
+  cart: [
+    {
+      productId: {type: mongoose.Schema.Types.ObjectId, ref: 'Product'},
+      quantity: {type: Number, default: 1}
+    }
+  ]
 });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  console.log("Original Password:", this.password);
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  console.log("Hashed Password:", this.password);
   next();
 });
 

@@ -3,28 +3,57 @@ import Navbar from './Navbar'
 import { IoStar } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
 import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
+import {toast, ToastContainer} from 'react-toastify';
 
-const UserProductDetails = ({ product }) => {
+const UserProductDetails = ({ productId }) => {
     const [fetchedProduct, setFetchedProduct] = useState();
+    const navigate = useNavigate();
+
+    const token = localStorage.getItem("token");
+    const decodeToken = JSON.parse(atob(token.split('.')[1]));
 
     const fetchProductById = async() =>{
         try{
-            const fetchedProductById = await axios.get(`http://localhost:5000/api/products/getProduct/${product}`,{
+            const fetchedProductById = await axios.get(`http://localhost:5000/api/products/getProduct/${productId}`,{
                 headers: { 'Content-Type': 'multipart/form-data' }
               });
               console.log(fetchedProductById);
               const productArray = [fetchedProductById.data.product];
-              console.log("fetched Product by id", productArray);
             setFetchedProduct(productArray);
-            console.log(typeof(productArray))
         } catch(error){
             console.error(error);
+        }
+    }   
+
+    const addToCart = async() => {
+        try{
+            if(token){
+                const addCart = await axios.post('http://localhost:5000/api/cart/addCart',
+                    {
+                    productId: productId,
+                    quantity: 1
+                    },
+            {
+                headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+            toast.success("Product Added to Cart!");
+            console.log("Product added to cart Successfully!", addCart.data)
+            }
+            else{
+                console.log("token not available");
+            }
+            
+        } catch(error){
+            console.log("product id not available")
         }
     }
 
     useEffect(() => {
-        if (product) fetchProductById();
-    }, [product]);
+        if (productId) fetchProductById();
+    }, [productId]);
     return (
         <>
             <div className='productDetails-mainContainer'>
@@ -52,7 +81,7 @@ const UserProductDetails = ({ product }) => {
                             <p className='productDetails-category'>{item.category}</p>
                             <div className='productDetails-btns'>
                                 <button className='buynowBtn'>Buy Now</button>
-                                <button className='cartBtn'>Add to Cart</button>
+                                <button className='cartBtn' onClick={addToCart}>Add to Cart</button>
                             </div>
                             <div className='productDetails-description'>
                                 <h2>Description :</h2>
@@ -63,7 +92,7 @@ const UserProductDetails = ({ product }) => {
                     </div>
                     ))}
                 </div>
-
+                <ToastContainer/>
             </div>
         </>
     )

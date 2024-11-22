@@ -5,7 +5,7 @@ import { IoStar } from "react-icons/io5";
 import {Link, useLocation} from 'react-router-dom';
 
 
-const UserProductList = ({setProduct}) => {
+const UserProductList = ({setProductId}) => {
     const [products, setProducts] = useState([]);
     const [noProducts, setNoProducts] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -91,7 +91,7 @@ const UserProductList = ({setProduct}) => {
                 <div className='user-subContainer'>
                     {filteredProducts?.map((item, index) => (
                         <Link to='/userProductDetails' className='userProductDetails-link'>
-                            <div key={index} className='product-container' onClick={() => {setProduct(item._id)}}>
+                            <div key={index} className='product-container' onClick={() => {setProductId(item._id)}}>
                             {item.image ? (<img src={`http://localhost:5000/${item.image}`} alt="lava mobile" />) : (<span>Image not available.</span>)}
                             <div className='product-detailsContainer'>
                                 <div className='product-title'>

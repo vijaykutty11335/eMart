@@ -9,6 +9,7 @@ import { MdOutlinePhone } from "react-icons/md";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Navbar = () => {
 
   const [searchTerm, setSearchterm] = useState("");
@@ -40,7 +41,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate('/login');
+    navigate('/homepage');
   }
 
   const handleKeyDown = (e) => {
@@ -54,7 +55,7 @@ const Navbar = () => {
       
         <div className='nav-container'>
           <div className='nav-logo'>
-          <Link to='/homepage' ><img src='./logo-png/styles-high-resolution-logo-transparent (1).png' alt='logo' width={150} height={40}/></Link>
+          <Link to='/homepage'><img src='./logo-png/styles-high-resolution-logo-transparent (1).png' alt='logo' width={150} height={40}/></Link>
           </div>
           <div className='search-group'>
             <input type="input" placeholder='Search Products...'
@@ -74,7 +75,7 @@ const Navbar = () => {
           </div>
           <div className='cart-logo'>
             <BsHandbag className='cart-icon'/>
-            <span>Bag</span>
+            <Link to ='/addtoCart'><a href="#">Bag</a></Link>
           </div>
           <div className='contact-us'>
             <MdOutlinePhone className='contactus-icon'/>
@@ -91,9 +92,9 @@ const Navbar = () => {
 
             {dropDown &&
             <div className='dropdown-menu'>
-              <button>Profile</button>
+              <Link to='/userProfilePage' className='userCircle'>Profile</Link>
               {isAdmin && <button onClick={() => {navigate('/adminAddProducts')}}>Dashboard</button>}
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={handleLogout} className='logout-btn'>Logout</button>
             </div>}
             </>
             }

@@ -81,11 +81,14 @@ const AdminProductList = ({ setProduct }) => {
     <>
       <div className="productList-container">
         <div className="admin-nav">
-          <h2>PRODUCTS</h2>
-          <Link to="/adminUserDetails">
-            <button className="list-btn">User Details</button>
-          </Link>
+          <img src="./logo-png/styles-high-resolution-logo-grayscale-transparent (2).png" alt="logo" />
+          <Link to='/homepage'><button className='list-btn'>Home</button></Link>
+          <Link to='/adminDashboard'><button className="list-btn">Dashboard</button></Link>
           <Link to="/adminAddProducts"><button className="list-btn">Add Products</button></Link>
+          <Link to="/adminProductList"><button className="list-btn">Products</button></Link>
+          <button className="list-btn">Orders</button>
+          <Link to="/adminUserDetails"><button className="list-btn">Users</button></Link>
+          
         </div>
         <div className="admin-search">
           <input

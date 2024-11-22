@@ -17,7 +17,7 @@ const HomePage = () => {
           <div className='welcome-text'>
             <span className='welcome-text1'>Unleash Your Style with Us!</span>
             <span className='welcome-text2'>Dive into the world of trends and timeless elegance.</span>
-            <Link to='/userProductList'><button className='explore-btn'>Explore<GoArrowRight className='explore-arrow'/></button></Link>
+            <Link to='/userProductList' className='explore-link'><button className='explore-btn'>Explore<GoArrowRight className='explore-arrow'/></button></Link>
 
           </div>
         </div>

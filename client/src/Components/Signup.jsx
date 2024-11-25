@@ -47,6 +47,10 @@ export default function Signup() {
     return (
         <>
             <div className='mainContainer'>
+                <div className='img-Container'>
+                    <img src="./Fashions/signup-bg.jpg" alt="signup-bg" />
+                </div>
+                <div className='subContainer'>
                 <form className='signup-form'  onSubmit={handleSubmit}>
                     <div className='signup-header'>
                     <h2>Signup</h2>
@@ -72,6 +76,7 @@ export default function Signup() {
                     
                     <ToastContainer/>
                 </form>
+            </div>
             </div>
         </>
     )

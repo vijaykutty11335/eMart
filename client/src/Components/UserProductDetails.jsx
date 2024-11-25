@@ -3,7 +3,7 @@ import Navbar from './Navbar'
 import { IoStar } from "react-icons/io5";
 import { MdVerifiedUser } from "react-icons/md";
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import {toast, ToastContainer} from 'react-toastify';
 
 const UserProductDetails = ({ productId }) => {
@@ -80,7 +80,7 @@ const UserProductDetails = ({ productId }) => {
                             </div>
                             <p className='productDetails-category'>{item.category}</p>
                             <div className='productDetails-btns'>
-                                <button className='buynowBtn'>Buy Now</button>
+                                <Link to='/orderPlacedPage'><button className='buynowBtn'>Buy Now</button></Link>
                                 <button className='cartBtn' onClick={addToCart}>Add to Cart</button>
                             </div>
                             <div className='productDetails-description'>

@@ -6,6 +6,8 @@ import { IoStar } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { MdClear } from "react-icons/md";
+import { Link, useNavigate } from 'react-router-dom';
 
 const AddtoCart = () => {
 
@@ -13,6 +15,9 @@ const AddtoCart = () => {
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [estimatedPrice, setEstimatedPrice] = useState(0);
     const [productCount, setProductCount] = useState(0);
+    const [noCartItems,setNoCartItems] = useState(false);
+
+    const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
     const decodeToken = JSON.parse(atob(token.split('.')[1]));
@@ -74,6 +79,42 @@ const AddtoCart = () => {
         }
     };
 
+    const handleClearCart = async () => {
+        try {
+            await axios.delete('http://localhost:5000/api/cart/clearCart', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setCartItems([]);
+            setNoCartItems(cartItems.length===0);
+            toast.success("All items Cleared from Cart!");
+            console.log("Cart cleared successfully!");
+        } catch (error) {
+            console.error("Error clearing cart: ", error.message);
+        }
+    }
+
+    const handlePlaceOrder = async() => {
+        try{
+            axios.delete('http://localhost:5000/api/cart/clearCart', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setCartItems([]);
+            setNoCartItems(cartItems.length===0)
+            navigate('/orderPlacedPage');
+            toast.success("Order Placed Successfully!");
+            console.log("Oder placed Successfully");
+        } catch(error) {
+            console.error(error.message);
+        }
+    }
+
+
+
+
     useEffect(() => {
         let totalPrice = 0;
         let totalQnty = 0;
@@ -91,13 +132,18 @@ const AddtoCart = () => {
     }, [cartItems]);
 
 
+
     return (
         <>
             <div className='cart-mainContainer'>
                 <div className='cart-subContainer'>
                     <Navbar />
-                    <div className='cart-left'>
 
+                    <div className='cart-left'>
+                        <div className='clearCart-btn'>
+
+                            {cartItems.length > 0 && <button onClick={handleClearCart}><MdClear className='clearCart-icon' />Clear Cart</button>}
+                        </div>
                         {cartItems?.map((item, index) => (
                             <div key={index} className='cartProduct-container'>
                                 <div className='cartImg'><img src={`http://localhost:5000/${item.productId.image}`} alt="cart-img" /></div>
@@ -114,7 +160,7 @@ const AddtoCart = () => {
                                 </div>
                                 <div className='cart-container3'>
                                     <div className='cart-incDec'>
-                                        
+
                                         <HiOutlineMinusCircle className='cart-subIcon' onClick={() => {
                                             if (token && item.quantity > 1) {
                                                 handleUpdateQnty(item.productId._id, item.quantity - 1);
@@ -139,17 +185,25 @@ const AddtoCart = () => {
 
                             </div>
                         ))}
+                        { cartItems.length===0 && <span className='nocartItems'>Cart items are displayed here</span>}
                     </div>
                     <div className='cart-right'>
+
                         <div className='order-summaryContainer'>
                             <div className='orderSummary'><span>Order Summary</span></div>
                             <div className='summary-text'>
-                                <div>Products Count : {productCount}</div>
-                                <div>Sub Total : {totalQuantity} (Units)</div>
-                                <div>Est. Total : ₹ {estimatedPrice}</div>
+                                <div>Cart Count : <span className='orderSummary-values'>{productCount}</span></div>
+                                <div>Sub Total : <span className='orderSummary-values'>{totalQuantity}</span> (Units)</div>
+                                <div>Est. Total : <span className='orderSummary-values'>₹ {estimatedPrice}</span></div>
                             </div>
                             <div className='proceed-btn'>
-                                <button>Proceed to Buy</button>
+                                <button onClick={() => {
+                                    if(cartItems.length > 0){
+                                        handlePlaceOrder();
+                                    } else {
+                                        alert("Your cart is empty. Please add at least one item to proceed.");
+                                    }
+                                }}>Proceed to Buy</button>
                             </div>
                         </div>
                     </div>

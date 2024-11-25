@@ -14,6 +14,7 @@ import UserProductDetails from './Components/UserProductDetails';
 import UserProfilePage from './Components/UserProfilepage';
 import AdminDashBoard from './Components/AdminDashBoard';
 import AddtoCart from './Components/AddtoCart';
+import OrderPlacedPage from './Components/OrderPlacedPage';
 
 function App() {
   const [product, setProduct] = useState();
@@ -46,6 +47,7 @@ function App() {
         <Route path='/userProductDetails' element={<UserProductDetails productId={productId} setProductIdCart={setProductIdCart}/>}/>
         <Route path='/userProfilePage' element={<UserProfilePage/>}/>
         <Route path='/addtoCart' element={<AddtoCart productIdCart={productIdCart}/>}/>
+        <Route path='/orderPlacedPage' element={<OrderPlacedPage/>}/>
 
       </Routes>
     </Router>

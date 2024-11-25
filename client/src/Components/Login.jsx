@@ -37,6 +37,9 @@ function Login() {
   return (
     <>
     <div className='mainContainer'>
+    <div className='img-Container'>
+                    <img src="./Fashions/signup-bg.jpg" alt="signup-bg" />
+                </div>
         <form className='login-form'  onSubmit={handleSubmit}>
             <div className='login-header'>
             <h2>Login</h2>

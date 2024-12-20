@@ -162,7 +162,11 @@ const AdminProductList = ({ setProduct }) => {
                   <td>{item.createdAtDate}<br />{item.createdAtTime}</td>
                   <td className="editDelete-btns">
                     <FaEdit className="admin-edit" onClick={() => { setProduct(item._id); navigate('/adminAddProducts')}} />
-                    <MdDelete className="admin-delete" onClick={() => handleDeleteProducts(item._id)} />
+                    <MdDelete className="admin-delete" onClick={() => {
+                      if(confirm("Do you want to delete this Product?")){
+                      handleDeleteProducts(item._id);
+                      }
+                    }} />
                   </td>
                 </tr>
               ))}

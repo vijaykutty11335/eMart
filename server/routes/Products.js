@@ -40,8 +40,8 @@ router.post('/addProducts', authenticateToken, authorizeRole('admin'), upload.si
         const newProduct = new productsModel({name, image, price, description, ratings, category, seller, stock});
         await newProduct.save();
         res.status(201).json({message : "Product added Successfully!"});
-    } catch(error) {
         
+    } catch(error) {
         console.log(error.message);
         res.status(500).send("An error occured");
     }
